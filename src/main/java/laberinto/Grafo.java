@@ -84,7 +84,7 @@ public class Grafo {
             for (int i = arcos.size() - 1; i >= 0; i--) {
                 Vertice vecino = arcos.get(i).getDestino();
                 if (!procesados.contains(vecino.getId())) {
-                    predecesores.putIfAbsent(vecino.getId(), actual);
+                    predecesores.put(vecino.getId(), actual);
                     pila.push(vecino);
                 }
             }

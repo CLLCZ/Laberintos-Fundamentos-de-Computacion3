@@ -23,5 +23,4 @@ public class ResultadoBusqueda {
         this.solucionEncontrada = solucionEncontrada;
         this.tiempoNanos = tiempoNanos;
     }
-
 }

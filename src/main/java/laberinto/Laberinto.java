@@ -1,6 +1,5 @@
 package laberinto;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class Laberinto {
             for (int j = 0; j < columnas; j++) {
                 char c = lineas.get(i).charAt(j);
                 if (ValidadorLaberinto.esTransitable(c)) {
-                    this.celdas[i][j] = ' '; // Normalizar '#' / 'E' / 'S' a ' ' para evaluar transitabilidad
+                    this.celdas[i][j] = ' ';
                     int id = idDe(i, j);
                     this.vertices.agregar(new Vertice(id, i, j));
                 } else {
@@ -35,11 +34,11 @@ public class Laberinto {
         this.idSalida  = idDe(coordsES[2], coordsES[3]);
     }
 
-    private int idDe(int fila, int col) {
+    public int idDe(int fila, int col) {
         return fila * columnas + col;
     }
 
-    public static Laberinto desdeLineas(List<String> lineas) throws IOException, IllegalAccessException {
+    public static Laberinto desdeLineas(List<String> lineas) throws ArchivoInvalidoException {
         int[] coordenadaES = ValidadorLaberinto.validar(lineas);
         return new Laberinto(lineas, coordenadaES);
     }

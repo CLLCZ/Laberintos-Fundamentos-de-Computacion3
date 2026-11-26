@@ -1,5 +1,7 @@
 package laberinto;
 
+//clase terminada
+
 public class Arcos {
     private final Vertice origen;
     private final Vertice destino;

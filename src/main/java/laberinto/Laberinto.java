@@ -58,7 +58,7 @@ public class Laberinto {
     public List<Arcos> generarArcos() {
         List<Arcos> arcos = new ArrayList<>();
         for (Vertice v : vertices.todosOrdenados()) {
-            for (int[] d : new int[][]{{0, 1}, {1, 0}}) { // Solo derecha y abajo
+            for (int[] d : new int[][]{{0, 1}, {1, 0}}) { // solo derecha y abajo
                 int f = v.getFila() + d[0];
                 int c = v.getColumna() + d[1];
                 if (esTransitable(f, c)) {
@@ -76,7 +76,10 @@ public class Laberinto {
     public Vertice getSalida() { return vertices.obtener(idSalida); }
     public char getChar(int f, int c) { return celdas[f][c]; }
 
+    //se pone de esta forma para validar que no sea una pared
     public boolean esTransitable(int f, int c) {
-        return f >= 0 && f < filas && c >= 0 && c < columnas && celdas[f][c] == ' ';
+        if (f < 0 || f >= filas || c < 0 || c >= columnas) return false;
+        char ch = celdas[f][c];
+        return ch == ' ' || ch == '#' || ch == 'E' || ch == 'S';
     }
 }

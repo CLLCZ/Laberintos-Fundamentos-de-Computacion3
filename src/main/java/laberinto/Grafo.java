@@ -28,6 +28,10 @@ public class Grafo {
         this.salida = laberinto.getSalida();
 
         construirGrafo();
+
+        BFS();
+        DFS();
+        caminoMasCorto();
     }
 
     private void construirGrafo() {

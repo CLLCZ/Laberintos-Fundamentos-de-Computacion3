@@ -9,6 +9,7 @@ public class DespliegueLaberinto {
         ArrayList<String> lineas = construirLineas(laberinto);
         imprimirLaberinto(lineas);
         for (Vertice visita : ordenVisita){
+            System.out.print("\033["+ lineas.size() + "A\r");
             Thread.sleep(100);
             avanzarLaberinto(visita, lineas);
             imprimirLaberinto(lineas);
@@ -20,7 +21,6 @@ public class DespliegueLaberinto {
     }
 
     private static void imprimirLaberinto(ArrayList<String> lineas){
-        System.out.println();
         for(String linea : lineas){
             System.out.println(linea);
         }
@@ -47,15 +47,4 @@ public class DespliegueLaberinto {
         laberinto.set(proximo.getFila(), linea.toString());
     }
 
-    public static void limpiar() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                new ProcessBuilder("clear").inheritIO().start().waitFor();
-            }
-        } catch (Exception e) {
-            // ignorar
-        }
-    }
 }

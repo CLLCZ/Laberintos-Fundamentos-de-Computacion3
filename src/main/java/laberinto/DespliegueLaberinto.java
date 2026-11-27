@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DespliegueLaberinto {
 
-    public static void despliegaLaberinto(ResultadoBusqueda resultado, Laberinto laberinto) throws InterruptedException {
+    public static void despliegaLaberinto(ResultadoBusqueda resultado, Laberinto laberinto) {
         List<Vertice> ordenVisita = resultado.getVisitados();
         List<Vertice> camino = resultado.getCamino();
         long tiempoNanos = resultado.getTiempoNanos();
@@ -30,13 +30,18 @@ public class DespliegueLaberinto {
         }
     }
 
-    private static void mostrarAnimacion(ArrayList<String> laberinto, List<Vertice> ordenVisita) throws InterruptedException {
+    private static void mostrarAnimacion(ArrayList<String> laberinto, List<Vertice> ordenVisita) {
         ArrayList<String> lineas = new ArrayList<>(laberinto);
         System.out.println("Recorriendo laberinto...");
         imprimirLaberinto(lineas);
         for (Vertice visita : ordenVisita){
             System.out.print("\033["+ lineas.size() + "A\r");
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e){
+                System.out.println(e.toString());
+            }
+
             avanzarLaberinto(visita, lineas);
             imprimirLaberinto(lineas);
         }

@@ -45,12 +45,63 @@ public class MenuConsola {
             }
 
             switch (opcion){
-
+                case 0:
+                    cargarLaberinto();
+                    break;
                 default:
                     break;
             }
         }
     }
 
+    private void cargarLaberinto(){
 
+        Thread cargarArchivo = new Thread(() -> {
+            try {
+                String path = seleccionarArchivo();
+                Laberinto laberinto = LectorLaberinto.cargar(path);
+                laberintoActual = laberinto;
+                grafoActual = new Grafo(laberinto);
+                System.out.flush();
+                System.out.println("\r\nLaberinto cargado!!!");
+            } catch (ArchivoInvalidoException e) {
+                System.out.flush();
+                System.out.println("\r\n" + e.toString());
+            }
+        }, "cargar archivo");
+
+        cargarArchivo.start();
+
+        String[] mensajesCarga = {"Cargando laberinto.  ", "Cargando laberinto.. ", "Cargando laberinto..." };
+        int contador = 0;
+        while (cargarArchivo.isAlive()){
+            System.out.print("\r" + mensajesCarga[contador]);
+            contador = (++contador % 3);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e){
+                System.out.println(e.toString());
+            }
+
+        }
+
+    }
+
+    private static String seleccionarArchivo() throws ArchivoInvalidoException{
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Selecciona un archivo .txt");
+
+        FileNameExtensionFilter filtroTxt = new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt");
+        chooser.setFileFilter(filtroTxt);
+
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        int resultado = chooser.showOpenDialog(null);
+
+        if (resultado != JFileChooser.APPROVE_OPTION) {
+            throw new ArchivoInvalidoException("No se selecciono ningun archivo valido.");
+        }
+
+        return chooser.getSelectedFile().getAbsolutePath();
+    }
 }

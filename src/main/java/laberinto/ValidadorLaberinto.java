@@ -5,14 +5,14 @@ import java.util.List;
 
 public class ValidadorLaberinto {
     private static final String CAR_VALIDOS = "+-| #ES";
-//E = Entrada , S = Salida ;
+    //E = Entrada , S = Salida ;
     public static boolean esTransitable(char caract) {
         return caract == ' ' || caract == '#' || caract == 'E' || caract == 'S';
     }
 
 
     public static int[] validar(List<String> lineas) throws ArchivoInvalidoException {
-        if (lineas.isEmpty()) throw new IllegalArgumentException("El archivo está vacío.");
+        if (lineas.isEmpty()) throw new ArchivoInvalidoException("El archivo está vacío.");
 
         int ancho = lineas.get(0).length();
         for (int i = 0; i < lineas.size(); i++) {
@@ -72,8 +72,9 @@ public class ValidadorLaberinto {
             }
         }
 
-        if (borde.size() < 2) {
-            throw new ArchivoInvalidoException("Sin marcas Entrada/Salida se necesitan al menos dos posiciones transitables en el borde (hay "
+        // Decisión: sin marcas debe haber exactamente dos (el enunciado dice "dos" y cada esquina cuenta una vez)
+        if (borde.size() != 2) {
+            throw new ArchivoInvalidoException("Sin marcas Entrada/Salida debe haber exactamente dos posiciones transitables en el borde (hay "
                     + borde.size() + ").");
         }
         return new int[]{borde.get(0)[0], borde.get(0)[1], borde.get(1)[0], borde.get(1)[1]};

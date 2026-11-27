@@ -11,12 +11,19 @@ public class Grafo {
     // listas de ADYACENCIA
     private final Map<Integer, List<Arcos>> adyacencia;
 
-    private ResultadoBusqueda ultimoResultado;
+    // nombres de los algoritmos, se usan como llave del mapa de resultados
+    public static final String ALG_DFS = "DFS";
+    public static final String ALG_BFS = "BFS";
+    public static final String ALG_DIJKSTRA = "Dijkstra";
+
+    // un resultado por algoritmo, así se pueden reutilizar en la opción 5
+    private final Map<String, ResultadoBusqueda> resultados;
 
     public Grafo(Laberinto laberinto) {
         this.laberinto = laberinto;
         this.vertices = new Vertices();
         this.adyacencia = new HashMap<>();
+        this.resultados = new LinkedHashMap<>();
         this.entrada = laberinto.getEntrada();
         this.salida = laberinto.getSalida();
 
@@ -58,7 +65,7 @@ public class Grafo {
             }
         }
     }
-        //DFS!
+    //DFS!
     public List<Vertice> DFS() {
         long inicio = System.nanoTime();
         List<Vertice> visitados = new ArrayList<>();
@@ -91,7 +98,7 @@ public class Grafo {
         }
 
         long fin = System.nanoTime();
-        guardarResultado(visitados, predecesores, procesados.contains(salida.getId()), fin - inicio);
+        guardarResultado(ALG_DFS, visitados, predecesores, procesados.contains(salida.getId()), fin - inicio);
         return visitados;
     }
     // BFS
@@ -125,7 +132,7 @@ public class Grafo {
         }
 
         long fin = System.nanoTime();
-        guardarResultado(visitados, predecesores, procesados.contains(salida.getId()), fin - inicio);
+        guardarResultado(ALG_BFS, visitados, predecesores, procesados.contains(salida.getId()), fin - inicio);
         return visitados;
     }
     // DIJKSTRA
@@ -175,11 +182,11 @@ public class Grafo {
         }
 
         long fin = System.nanoTime();
-        guardarResultado(visitados, predecesores, procesados.contains(salida.getId()), fin - inicio);
+        guardarResultado(ALG_DIJKSTRA, visitados, predecesores, procesados.contains(salida.getId()), fin - inicio);
         return visitados;
     }
 
-    private void guardarResultado(List<Vertice> visitados, Map<Integer, Vertice> predecesores, boolean encontrado, long tiempo) {
+    private void guardarResultado(String algoritmo, List<Vertice> visitados, Map<Integer, Vertice> predecesores, boolean encontrado, long tiempo) {
         List<Vertice> camino = null;
 
         if (encontrado) {
@@ -191,11 +198,12 @@ public class Grafo {
             }
         }
 
-        this.ultimoResultado = new ResultadoBusqueda(visitados, camino, encontrado, tiempo);
+        resultados.put(algoritmo, new ResultadoBusqueda(visitados, camino, encontrado, tiempo));
     }
 
     // getters
-    public ResultadoBusqueda getUltimoResultado() { return ultimoResultado; }
+    // devuelve null si ese algoritmo todavía no se ha ejecutado
+    public ResultadoBusqueda getResultado(String algoritmo) { return resultados.get(algoritmo); }
     public Vertices getVertices() { return vertices; }
     public Vertice getEntrada() { return entrada; }
     public Vertice getSalida() { return salida; }

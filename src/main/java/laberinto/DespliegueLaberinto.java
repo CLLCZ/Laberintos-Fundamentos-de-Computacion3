@@ -5,8 +5,34 @@ import java.util.List;
 
 public class DespliegueLaberinto {
 
-    public static void despliegaLaberinto(List<Vertice> ordenVisita, Laberinto laberinto) throws InterruptedException {
+    public static void despliegaLaberinto(ResultadoBusqueda resultado, Laberinto laberinto) throws InterruptedException {
+        List<Vertice> ordenVisita = resultado.getVisitados();
+        List<Vertice> camino = resultado.getCamino();
+        long tiempoNanos = resultado.getTiempoNanos();
         ArrayList<String> lineas = construirLineas(laberinto);
+
+        mostrarAnimacion(lineas, ordenVisita);
+        mostrarCaminoEncontrado(lineas, camino, tiempoNanos);
+
+    }
+
+    public static void mostrarResultadoFinal(ResultadoBusqueda resultado, Laberinto laberinto) {
+        List<Vertice> camino = resultado.getCamino();
+        ArrayList<String> lineas = construirLineas(laberinto);
+        long tiempoNanos = resultado.getTiempoNanos();
+
+        mostrarCaminoEncontrado(lineas, camino, tiempoNanos);
+    }
+
+    private static void imprimirLaberinto(ArrayList<String> lineas){
+        for(String linea : lineas){
+            System.out.println(linea);
+        }
+    }
+
+    private static void mostrarAnimacion(ArrayList<String> laberinto, List<Vertice> ordenVisita) throws InterruptedException {
+        ArrayList<String> lineas = new ArrayList<>(laberinto);
+        System.out.println("Recorriendo laberinto...");
         imprimirLaberinto(lineas);
         for (Vertice visita : ordenVisita){
             System.out.print("\033["+ lineas.size() + "A\r");
@@ -14,16 +40,7 @@ public class DespliegueLaberinto {
             avanzarLaberinto(visita, lineas);
             imprimirLaberinto(lineas);
         }
-    }
-
-    public void mostrarResultadoFinal(ResultadoBusqueda resultado) {
-        throw new UnsupportedOperationException(" rol C: imprimir camino o aviso");
-    }
-
-    private static void imprimirLaberinto(ArrayList<String> lineas){
-        for(String linea : lineas){
-            System.out.println(linea);
-        }
+        System.out.print("\033["+ (lineas.size() + 1) + "A\r");
     }
 
     private static ArrayList<String> construirLineas(Laberinto laberinto){
@@ -47,4 +64,12 @@ public class DespliegueLaberinto {
         laberinto.set(proximo.getFila(), linea.toString());
     }
 
+    private static void mostrarCaminoEncontrado(ArrayList<String> laberinto, List<Vertice> solucion, long tiempoNanos){
+        ArrayList<String> lineas = new ArrayList<>(laberinto);
+        for(Vertice vertice : solucion){
+            avanzarLaberinto(vertice, lineas);
+        }
+        System.out.println("Camino encontrado en: " + (tiempoNanos/1000000) + "ms  ");
+        imprimirLaberinto(lineas);
+    }
 }

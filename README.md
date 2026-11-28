@@ -50,4 +50,4 @@ Genera tus propios laberintos: https://www.delorie.com/game-room/mazes/genmaze.c
 
 - Sebastian Gastelum (gadfaeds): Menu principal, y animacion de despliegue de laberinto.
 - Camila Zazueta (CLLCZ): Aspecto gráfico de la solución del laberinto.
-- Victor Izarraras (victorizarraras) : <qué hizo>
+- Victor Izarraras (victorizarraras) : Implementación de algoritmos DFS, BFS, Dijsktra en la lógica del programa

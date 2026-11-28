@@ -7,7 +7,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class MenuConsola {
     private Laberinto laberintoActual;
-    private Grafo grafoActual;
+    private Grafo grafoActual = null;
     private LectorLaberinto lector;
     private DespliegueLaberinto despliegue;
     private ReporteComparativo reporte;
@@ -21,8 +21,9 @@ public class MenuConsola {
     public void ejecutar() {
         Scanner sc = new Scanner(System.in);
 
-        while (true){
-            int opcion = -1;
+        int opcion = -1;
+        while (opcion != 5){
+            opcion = -1;
             System.out.println("-----RESOLVER LABERINTOS CON GRAFOS-----");
             System.out.println("0. Cargar laberinto");
             System.out.println("1. Resolver con DFS");
@@ -48,9 +49,46 @@ public class MenuConsola {
                 case 0:
                     cargarLaberinto();
                     break;
+                case 1:
+                    if (grafoActual != null){
+                        DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DFS), laberintoActual);
+                        break;
+                    } else {
+                        System.out.println("Debes de agregar un laberinto");
+                    }
+                    break;
+                case 2:
+                    if (grafoActual != null){
+                        DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_BFS), laberintoActual);
+                        break;
+                    } else {
+                        System.out.println("Debes de agregar un laberinto");
+                    }
+                    break;
+                case 3:
+                    if (grafoActual != null){
+                        DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DIJKSTRA), laberintoActual);
+                        break;
+                    } else {
+                        System.out.println("Debes de agregar un laberinto");
+                    }
+                    break;
+                case 4:
+                    if (grafoActual != null){
+                        String[] algoritmos = {Grafo.ALG_BFS, Grafo.ALG_DFS, Grafo.ALG_DIJKSTRA};
+                        for (String alg : algoritmos){
+                            System.out.println("-----"+ alg+ "-----");
+                            DespliegueLaberinto.mostrarResultadoFinal(grafoActual.getResultado(alg), laberintoActual);
+                        }
+                    } else {
+                        System.out.println("Debes de agregar un laberinto");
+                    }
+                    break;
                 default:
                     break;
             }
+
+
         }
     }
 
@@ -104,4 +142,5 @@ public class MenuConsola {
 
         return chooser.getSelectedFile().getAbsolutePath();
     }
+
 }

@@ -7,10 +7,7 @@ public class DespliegueLaberinto {
 
     public static void despliegaLaberinto(ResultadoBusqueda resultado, Laberinto laberinto) {
         List<Vertice> ordenVisita = resultado.getVisitados();
-        List<Vertice> camino = resultado.getCamino();
-        long tiempoNanos = resultado.getTiempoNanos();
         ArrayList<String> lineas = construirLineas(laberinto);
-        boolean isSolucion = resultado.isSolucionEncontrada();
 
         mostrarAnimacion(lineas, ordenVisita);
         mostrarResultadoFinal(resultado, laberinto);

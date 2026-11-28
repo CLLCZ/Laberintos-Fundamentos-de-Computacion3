@@ -1,9 +1,8 @@
 package laberinto;
 
-import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws ArchivoInvalidoException, InterruptedException {
+    public static void main(String[] args) {
         MenuConsola menu = new MenuConsola();
         menu.ejecutar();
     }

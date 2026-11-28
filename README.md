@@ -7,15 +7,14 @@ Además cuenta con interfaz realizada en Swing.
 
 
 ![Animación de BFS](docs/bfs.gif)
-![AnimacionGrafica.png](img.png)
+<img alt="AnimacionGrafica.png" height="600" src="img.png" width="600"/>
 
 
 ## Características
 
 - Algoritmos: BFS, DFS y Dijkstra
 - Animación del recorrido en la terminal
-- Estadísticas: longitud del camino, vértices visitados y tiempo
-- No requiere dependencias externas
+- Estadísticas: longitud del camino, vértices visitados y tiempo 
 
 
 
@@ -50,5 +49,5 @@ Genera tus propios laberintos: https://www.delorie.com/game-room/mazes/genmaze.c
 ## Autores
 
 - Sebastian Gastelum (gadfaeds): Menu principal, y animacion de despliegue de laberinto.
-- - Camila Zazueta (CLLCZ): Aspecto gráfico de la solución del laberinto.
-- <Compañero>: <qué hizo>
+- Camila Zazueta (CLLCZ): Aspecto gráfico de la solución del laberinto.
+- Victor Izarraras (victorizarraras) : <qué hizo>

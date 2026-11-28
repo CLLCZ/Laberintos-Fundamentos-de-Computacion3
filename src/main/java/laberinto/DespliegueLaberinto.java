@@ -39,7 +39,7 @@ public class DespliegueLaberinto {
         for (Vertice visita : ordenVisita){
             System.out.print("\033["+ lineas.size() + "A\r");
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e){
                 System.out.println(e.toString());
             }

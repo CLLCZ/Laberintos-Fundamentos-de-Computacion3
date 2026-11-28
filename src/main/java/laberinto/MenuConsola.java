@@ -111,7 +111,7 @@ public class MenuConsola {
 
         cargarArchivo.start();
 
-        String[] mensajesCarga = {"Cargando laberinto.  ", "Cargando laberinto.. ", "Cargando laberinto..." };
+        String[] mensajesCarga = {"Selecciona tu laberinto.  ", "Selecciona tu laberinto.. ", "Selecciona tu laberinto..." };
         int contador = 0;
         while (cargarArchivo.isAlive()){
             System.out.print("\r" + mensajesCarga[contador]);

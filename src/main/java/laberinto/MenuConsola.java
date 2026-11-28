@@ -24,7 +24,7 @@ public class MenuConsola {
         int opcion = -1;
         while (opcion != 5){
             opcion = -1;
-            System.out.println("-----RESOLVER LABERINTOS CON GRAFOS-----");
+            System.out.println("\n-----RESOLVER LABERINTOS CON GRAFOS-----");
             System.out.println("0. Cargar laberinto");
             System.out.println("1. Resolver con DFS");
             System.out.println("2. Resolver con BFS");
@@ -45,6 +45,7 @@ public class MenuConsola {
                 continue;
             }
 
+            System.out.println();
             switch (opcion){
                 case 0:
                     cargarLaberinto();

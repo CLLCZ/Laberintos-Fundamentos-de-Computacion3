@@ -13,7 +13,7 @@ public class DespliegueLaberinto {
         boolean isSolucion = resultado.isSolucionEncontrada();
 
         mostrarAnimacion(lineas, ordenVisita);
-        mostrarCaminoEncontrado(lineas, camino, tiempoNanos, isSolucion);
+        mostrarResultadoFinal(resultado, laberinto);
 
     }
 
@@ -22,8 +22,18 @@ public class DespliegueLaberinto {
         ArrayList<String> lineas = construirLineas(laberinto);
         long tiempoNanos = resultado.getTiempoNanos();
         boolean isSolucion = resultado.isSolucionEncontrada();
+        for(Vertice vertice : camino){
+            avanzarLaberinto(vertice, lineas);
+        }
+        if (isSolucion){
+            System.out.println("Camino encontrado en: " + (tiempoNanos/1000000) + "ms                   ");
+            System.out.println("Longitud del camino: " + (camino.size() - 1) + "                    ");
+            System.out.println("Verices visitados: " + resultado.getVisitados().size() + "                  ");
+        } else {
+            System.out.println("No hay solucion              ");
+        }
 
-        mostrarCaminoEncontrado(lineas, camino, tiempoNanos, isSolucion);
+        imprimirLaberinto(lineas);
     }
 
     private static void imprimirLaberinto(ArrayList<String> lineas){
@@ -71,12 +81,4 @@ public class DespliegueLaberinto {
         laberinto.set(proximo.getFila(), linea.toString());
     }
 
-    private static void mostrarCaminoEncontrado(ArrayList<String> laberinto, List<Vertice> solucion, long tiempoNanos, boolean isSolucion){
-        ArrayList<String> lineas = new ArrayList<>(laberinto);
-        for(Vertice vertice : solucion){
-            avanzarLaberinto(vertice, lineas);
-        }
-        System.out.println(isSolucion?("Camino encontrado en: " + (tiempoNanos/1000000) + "ms  ") : "No hay solucion");
-        imprimirLaberinto(lineas);
-    }
 }

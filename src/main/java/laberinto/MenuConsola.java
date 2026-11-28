@@ -1,161 +1,168 @@
 package laberinto;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class MenuConsola {
-    private Laberinto laberintoActual;
+    private Laberinto laberintoActual = null;
     private Grafo grafoActual = null;
-
+    private Scanner sc;
 
     public void ejecutar() {
-        Scanner sc = new Scanner(System.in);
+        sc = new Scanner(System.in);
 
         int opcion = -1;
-        while (opcion != 6){
-            opcion = -1;
-            System.out.println("\n-----RESOLVER LABERINTOS CON GRAFOS-----");
-            // numeración 1-6
-            System.out.println("1. Cargar laberinto");
-            System.out.println("2. Resolver con DFS");
-            System.out.println("3. Resolver con BFS");
-            System.out.println("4. Resolver con Dijkstra (camino mas corto)");
-            System.out.println("5. Mostrar las tres soluciones");
-            System.out.println("6. Salir");
-
-            if (sc.hasNextInt()){
-                int n = sc.nextInt();
-                if (1 <= n && n <= 6){
-                    opcion = n;
-                } else {
-                    System.out.println("Seleccione una opcion valida");
-                }
-            } else {
-                System.out.println("Seleccione una opcion valida");
-                sc.next();
-                continue;
-            }
-
+        while (opcion != 6) {
+            imprimirMenu();
+            opcion = leerOpcion();
             System.out.println();
-            switch (opcion){
+
+            switch (opcion) {
                 case 1:
                     cargarLaberinto();
                     break;
                 case 2:
-                    if (grafoActual != null){
-                        // se ejecuta el algoritmo deseado
-                        ejecutarAlgoritmo(Grafo.ALG_DFS);
-                        DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DFS), laberintoActual);
-                        break;
-                    } else {
-                        System.out.println("Debes de agregar un laberinto");
-                    }
+                    resolver(Grafo.ALG_DFS);
                     break;
                 case 3:
-                    if (grafoActual != null){
-                        ejecutarAlgoritmo(Grafo.ALG_BFS);
-                        DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_BFS), laberintoActual);
-                        break;
-                    } else {
-                        System.out.println("Debes de agregar un laberinto");
-                    }
+                    resolver(Grafo.ALG_BFS);
                     break;
                 case 4:
-                    if (grafoActual != null){
-                        ejecutarAlgoritmo(Grafo.ALG_DIJKSTRA);
-                        DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DIJKSTRA), laberintoActual);
-                        break;
-                    } else {
-                        System.out.println("Debes de agregar un laberinto");
-                    }
+                    resolver(Grafo.ALG_DIJKSTRA);
                     break;
                 case 5:
-                    if (grafoActual != null){
-                        String[] algoritmos = {Grafo.ALG_BFS, Grafo.ALG_DFS, Grafo.ALG_DIJKSTRA};
-                        for (String alg : algoritmos){
-                            // Problema 3: solo se ejecutan los que falten, los demás se reutilizan
-                            if (grafoActual.getResultado(alg) == null){
-                                ejecutarAlgoritmo(alg);
-                            }
-                            System.out.println("-----"+ alg+ "-----");
-                            DespliegueLaberinto.mostrarResultadoFinal(grafoActual.getResultado(alg), laberintoActual);
-                        }
-                    } else {
-                        System.out.println("Debes de agregar un laberinto");
-                    }
+                    mostrarTresSoluciones();
                     break;
                 case 6:
                     System.out.println("Hasta luego.");
                     break;
                 default:
+                    System.out.println("Opción no válida, intenta de nuevo.");
                     break;
             }
-
-
         }
     }
 
-    private void ejecutarAlgoritmo(String algoritmo){
-        if (algoritmo.equals(Grafo.ALG_DFS)){
+    private void imprimirMenu() {
+        System.out.println("\n-----RESOLVER LABERINTOS CON GRAFOS-----");
+        // 1-6 numeración
+        System.out.println("1. Cargar laberinto");
+        System.out.println("2. Resolver con DFS");
+        System.out.println("3. Resolver con BFS");
+        System.out.println("4. Resolver con Dijkstra (camino mas corto)");
+        System.out.println("5. Mostrar las tres soluciones");
+        System.out.println("6. Salir");
+    }
+
+
+    private int leerOpcion() {
+        System.out.print("Elige una opción: ");
+        String linea = leerLinea();
+        if (linea == null) {
+            // si se acaba la entrada se sale del menú
+            System.out.println();
+            return 6;
+        }
+        try {
+            int n = Integer.parseInt(linea.trim());
+            if (1 <= n && n <= 6) {
+                return n;
+            }
+        } catch (NumberFormatException e) {
+            // no es un número, se trata como opción no válida
+        }
+        return -1;
+    }
+
+    //devuelve null cuando ya no hay más entrada
+    private String leerLinea() {
+        try {
+            return sc.nextLine();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    //la ruta se pide por consola
+    private void cargarLaberinto() {
+        System.out.print("Escribe la ruta del archivo del laberinto: ");
+        String ruta = leerLinea();
+        if (ruta == null) {
+            return;
+        }
+        ruta = limpiarRuta(ruta);
+        if (ruta.isEmpty()) {
+            System.out.println("No escribiste ninguna ruta.");
+            return;
+        }
+
+        try {
+            Laberinto nuevo = LectorLaberinto.cargar(ruta);
+            // el Grafo nuevo descarta los resultados anteriores; solo se reemplaza si la carga salió bien
+            laberintoActual = nuevo;
+            grafoActual = new Grafo(nuevo);
+            System.out.println("Laberinto cargado: " + nuevo.getFilas() + " renglones x " + nuevo.getColumnas() + " columnas.");
+        } catch (ArchivoInvalidoException e) {
+            System.out.println("No se pudo cargar el laberinto: " + e.getMessage());
+            if (laberintoActual != null) {
+                System.out.println("Se conserva el laberinto cargado anteriormente.");
+            }
+        }
+    }
+
+    // quita comillas, convierte "\ " en espacio
+    private String limpiarRuta(String ruta) {
+        String limpia = ruta.trim();
+        boolean entreComillas = limpia.length() >= 2
+                && ((limpia.startsWith("\"") && limpia.endsWith("\""))
+                || (limpia.startsWith("'") && limpia.endsWith("'")));
+        if (entreComillas) {
+            limpia = limpia.substring(1, limpia.length() - 1);
+        }
+        limpia = limpia.replace("\\ ", " ");
+        if (limpia.startsWith("~")) {
+            limpia = System.getProperty("user.home") + limpia.substring(1);
+        }
+        return limpia;
+    }
+
+    private boolean hayLaberinto() {
+        if (grafoActual == null) {
+            System.out.println("Primero carga un laberinto (opción 1).");
+            return false;
+        }
+        return true;
+    }
+
+    private void resolver(String algoritmo) {
+        if (!hayLaberinto()) {
+            return;
+        }
+        ejecutarAlgoritmo(algoritmo);
+        DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(algoritmo), laberintoActual);
+    }
+
+    private void mostrarTresSoluciones() {
+        if (!hayLaberinto()) {
+            return;
+        }
+        String[] algoritmos = {Grafo.ALG_DFS, Grafo.ALG_BFS, Grafo.ALG_DIJKSTRA};
+        for (String alg : algoritmos) {
+            if (grafoActual.getResultado(alg) == null) {
+                ejecutarAlgoritmo(alg);
+            }
+            System.out.println("-----" + alg + "-----");
+            DespliegueLaberinto.mostrarResultadoFinal(grafoActual.getResultado(alg), laberintoActual);
+        }
+    }
+
+    private void ejecutarAlgoritmo(String algoritmo) {
+        if (algoritmo.equals(Grafo.ALG_DFS)) {
             grafoActual.DFS();
-        } else if (algoritmo.equals(Grafo.ALG_BFS)){
+        } else if (algoritmo.equals(Grafo.ALG_BFS)) {
             grafoActual.BFS();
         } else {
             grafoActual.caminoMasCorto();
         }
     }
-
-    private void cargarLaberinto(){
-
-        Thread cargarArchivo = new Thread(() -> {
-            try {
-                String path = seleccionarArchivo();
-                Laberinto laberinto = LectorLaberinto.cargar(path);
-                laberintoActual = laberinto;
-                grafoActual = new Grafo(laberinto);
-                System.out.flush();
-                System.out.println("\r\nLaberinto cargado!!!");
-            } catch (ArchivoInvalidoException e) {
-                System.out.flush();
-                // Mostrar motivo y no sologit "laberinto.ArchivoInvalidoException: ...")
-                System.out.println("\r\nNo se pudo cargar el laberinto: " + e.getMessage());
-            }
-        }, "cargar archivo");
-
-        cargarArchivo.start();
-
-        String[] mensajesCarga = {"Selecciona tu laberinto.  ", "Selecciona tu laberinto.. ", "Selecciona tu laberinto..." };
-        int contador = 0;
-        while (cargarArchivo.isAlive()){
-            System.out.print("\r" + mensajesCarga[contador]);
-            contador = (++contador % 3);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e){
-                System.out.println(e.toString());
-            }
-
-        }
-
-    }
-
-    private static String seleccionarArchivo() throws ArchivoInvalidoException{
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Selecciona un archivo .txt");
-
-        FileNameExtensionFilter filtroTxt = new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt");
-        chooser.setFileFilter(filtroTxt);
-
-        chooser.setAcceptAllFileFilterUsed(false);
-
-        int resultado = chooser.showOpenDialog(null);
-
-        if (resultado != JFileChooser.APPROVE_OPTION) {
-            throw new ArchivoInvalidoException("No se selecciono ningun archivo valido.");
-        }
-
-        return chooser.getSelectedFile().getAbsolutePath();
-    }
-
 }

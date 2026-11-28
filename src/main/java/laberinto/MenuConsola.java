@@ -13,19 +13,20 @@ public class MenuConsola {
         Scanner sc = new Scanner(System.in);
 
         int opcion = -1;
-        while (opcion != 5){
+        while (opcion != 6){
             opcion = -1;
             System.out.println("\n-----RESOLVER LABERINTOS CON GRAFOS-----");
-            System.out.println("0. Cargar laberinto");
-            System.out.println("1. Resolver con DFS");
-            System.out.println("2. Resolver con BFS");
-            System.out.println("3. Camino mas corto");
-            System.out.println("4. Mostrar las tres soluciones");
-            System.out.println("5. Salir");
+            // Problema 1: numeración 1-6 como pide el enunciado (antes empezaba en 0)
+            System.out.println("1. Cargar laberinto");
+            System.out.println("2. Resolver con DFS");
+            System.out.println("3. Resolver con BFS");
+            System.out.println("4. Resolver con Dijkstra (camino mas corto)");
+            System.out.println("5. Mostrar las tres soluciones");
+            System.out.println("6. Salir");
 
             if (sc.hasNextInt()){
                 int n = sc.nextInt();
-                if (0 <= n && n <= 5){
+                if (1 <= n && n <= 6){
                     opcion = n;
                 } else {
                     System.out.println("Seleccione una opcion valida");
@@ -38,10 +39,10 @@ public class MenuConsola {
 
             System.out.println();
             switch (opcion){
-                case 0:
+                case 1:
                     cargarLaberinto();
                     break;
-                case 1:
+                case 2:
                     if (grafoActual != null){
                         DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DFS), laberintoActual);
                         break;
@@ -49,7 +50,7 @@ public class MenuConsola {
                         System.out.println("Debes de agregar un laberinto");
                     }
                     break;
-                case 2:
+                case 3:
                     if (grafoActual != null){
                         DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_BFS), laberintoActual);
                         break;
@@ -57,7 +58,7 @@ public class MenuConsola {
                         System.out.println("Debes de agregar un laberinto");
                     }
                     break;
-                case 3:
+                case 4:
                     if (grafoActual != null){
                         DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DIJKSTRA), laberintoActual);
                         break;
@@ -65,7 +66,7 @@ public class MenuConsola {
                         System.out.println("Debes de agregar un laberinto");
                     }
                     break;
-                case 4:
+                case 5:
                     if (grafoActual != null){
                         String[] algoritmos = {Grafo.ALG_BFS, Grafo.ALG_DFS, Grafo.ALG_DIJKSTRA};
                         for (String alg : algoritmos){
@@ -75,6 +76,9 @@ public class MenuConsola {
                     } else {
                         System.out.println("Debes de agregar un laberinto");
                     }
+                    break;
+                case 6:
+                    System.out.println("Hasta luego.");
                     break;
                 default:
                     break;

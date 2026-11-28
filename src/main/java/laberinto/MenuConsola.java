@@ -16,7 +16,7 @@ public class MenuConsola {
         while (opcion != 6){
             opcion = -1;
             System.out.println("\n-----RESOLVER LABERINTOS CON GRAFOS-----");
-            // Problema 1: numeración 1-6 como pide el enunciado (antes empezaba en 0)
+            // numeración 1-6
             System.out.println("1. Cargar laberinto");
             System.out.println("2. Resolver con DFS");
             System.out.println("3. Resolver con BFS");
@@ -44,6 +44,8 @@ public class MenuConsola {
                     break;
                 case 2:
                     if (grafoActual != null){
+                        // se ejecuta el algoritmo deseado
+                        ejecutarAlgoritmo(Grafo.ALG_DFS);
                         DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DFS), laberintoActual);
                         break;
                     } else {
@@ -52,6 +54,7 @@ public class MenuConsola {
                     break;
                 case 3:
                     if (grafoActual != null){
+                        ejecutarAlgoritmo(Grafo.ALG_BFS);
                         DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_BFS), laberintoActual);
                         break;
                     } else {
@@ -60,6 +63,7 @@ public class MenuConsola {
                     break;
                 case 4:
                     if (grafoActual != null){
+                        ejecutarAlgoritmo(Grafo.ALG_DIJKSTRA);
                         DespliegueLaberinto.despliegaLaberinto(grafoActual.getResultado(Grafo.ALG_DIJKSTRA), laberintoActual);
                         break;
                     } else {
@@ -70,6 +74,10 @@ public class MenuConsola {
                     if (grafoActual != null){
                         String[] algoritmos = {Grafo.ALG_BFS, Grafo.ALG_DFS, Grafo.ALG_DIJKSTRA};
                         for (String alg : algoritmos){
+                            // Problema 3: solo se ejecutan los que falten, los demás se reutilizan
+                            if (grafoActual.getResultado(alg) == null){
+                                ejecutarAlgoritmo(alg);
+                            }
                             System.out.println("-----"+ alg+ "-----");
                             DespliegueLaberinto.mostrarResultadoFinal(grafoActual.getResultado(alg), laberintoActual);
                         }
@@ -88,6 +96,16 @@ public class MenuConsola {
         }
     }
 
+    private void ejecutarAlgoritmo(String algoritmo){
+        if (algoritmo.equals(Grafo.ALG_DFS)){
+            grafoActual.DFS();
+        } else if (algoritmo.equals(Grafo.ALG_BFS)){
+            grafoActual.BFS();
+        } else {
+            grafoActual.caminoMasCorto();
+        }
+    }
+
     private void cargarLaberinto(){
 
         Thread cargarArchivo = new Thread(() -> {
@@ -100,7 +118,8 @@ public class MenuConsola {
                 System.out.println("\r\nLaberinto cargado!!!");
             } catch (ArchivoInvalidoException e) {
                 System.out.flush();
-                System.out.println("\r\n" + e.toString());
+                // Mostrar motivo y no sologit "laberinto.ArchivoInvalidoException: ...")
+                System.out.println("\r\nNo se pudo cargar el laberinto: " + e.getMessage());
             }
         }, "cargar archivo");
 

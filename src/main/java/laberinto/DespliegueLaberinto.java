@@ -23,7 +23,7 @@ public class DespliegueLaberinto {
             for(Vertice vertice : camino){
                 avanzarLaberinto(vertice, lineas);
             }
-            System.out.println("Camino encontrado en: " + (tiempoNanos / 1000000) + "ms\033[K");
+            System.out.println("Camino encontrado en: " + (tiempoNanos / 1000000.0) + "ms\033[K");
             System.out.println("Longitud del camino: " + (camino.size() - 1) + "\033[K");
             System.out.println("Vértices visitados: " + resultado.getVisitados().size() + "\033[K");
             imprimirLaberinto(lineas);

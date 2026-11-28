@@ -22,18 +22,19 @@ public class DespliegueLaberinto {
         ArrayList<String> lineas = construirLineas(laberinto);
         long tiempoNanos = resultado.getTiempoNanos();
         boolean isSolucion = resultado.isSolucionEncontrada();
-        for(Vertice vertice : camino){
-            avanzarLaberinto(vertice, lineas);
-        }
         if (isSolucion){
+            for(Vertice vertice : camino){
+                avanzarLaberinto(vertice, lineas);
+            }
             System.out.println("Camino encontrado en: " + (tiempoNanos/1000000) + "ms                   ");
             System.out.println("Longitud del camino: " + (camino.size() - 1) + "                    ");
             System.out.println("Verices visitados: " + resultado.getVisitados().size() + "                  ");
+            imprimirLaberinto(lineas);
         } else {
             System.out.println("No hay solucion              ");
+            System.out.print("\033[" + lineas.size() + "B\r");
         }
 
-        imprimirLaberinto(lineas);
     }
 
     private static void imprimirLaberinto(ArrayList<String> lineas){
